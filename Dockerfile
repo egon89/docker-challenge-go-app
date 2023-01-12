@@ -1,3 +1,4 @@
+# Build stage
 FROM golang:1.16-alpine AS build
 
 WORKDIR /app
@@ -8,4 +9,11 @@ COPY *.go ./
 
 RUN go build -o /hello-go-challenge
 
-CMD [ "/hello-go-challenge" ]
+# Run stage
+FROM scratch
+
+WORKDIR /
+
+COPY --from=build /hello-go-challenge .
+
+ENTRYPOINT ["/hello-go-challenge"]
